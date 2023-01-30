@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@fontsource/open-sans": "^4.5.14",
     "firebase": "^9.16.0",
     "framer-motion": "^6.5.1",
     "next": "13.1.6",
