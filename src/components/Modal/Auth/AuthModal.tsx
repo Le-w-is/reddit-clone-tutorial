@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	Flex,
 	Modal,
@@ -7,7 +8,6 @@ import {
 	ModalHeader,
 	ModalOverlay,
 } from "@chakra-ui/react";
-import React from "react";
 import { useRecoilState } from "recoil";
 import { authModalState } from "../../../atoms/authModalAtom";
 import AuthInputs from "./AuthInputs";
