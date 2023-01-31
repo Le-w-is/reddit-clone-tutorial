@@ -12,6 +12,7 @@ const SignUp: React.FC = () => {
 	});
 
 	//firebase logic
+
 	const onSubmit = () => {};
 	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSignUpForm((prev) => ({
