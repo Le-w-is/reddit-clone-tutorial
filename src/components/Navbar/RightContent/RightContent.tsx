@@ -4,6 +4,7 @@ import React from "react";
 import { auth } from "../../../firebase/clientApp";
 import AuthModal from "../../Modal/Auth/AuthModal";
 import AuthButtons from "./AuthButtons";
+import Icons from "./Icons";
 
 type RightContentProps = {
 	user?: User | null;
@@ -14,11 +15,7 @@ const RightContent: React.FC<RightContentProps> = ({ user }) => {
 		<>
 			<AuthModal />
 			<Flex justify="center" align="center">
-				{user ? (
-					<Button onClick={() => signOut(auth)}>Log Out</Button>
-				) : (
-					<AuthButtons />
-				)}
+				{user ? <Icons /> : <AuthButtons />}
 				{/*  menu */}
 			</Flex>
 		</>
