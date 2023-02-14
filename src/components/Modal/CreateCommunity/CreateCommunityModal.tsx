@@ -18,9 +18,16 @@ import {
 } from "@chakra-ui/react";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+	doc,
+	getDoc,
+	runTransaction,
+	serverTimestamp,
+	setDoc,
+} from "firebase/firestore";
 import { auth, firestore } from "../../../firebase/clientApp";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Transaction } from "@google-cloud/firestore";
 
 type CreateCommunityModalProps = {
 	open: boolean;
@@ -66,20 +73,29 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 		try {
 			const communityDocRef = doc(firestore, "communities", communityName);
 
-			// check if community exists in db
-			const communityDoc = await getDoc(communityDocRef);
+			await runTransaction(firestore, async (Transaction) => {
+				// check if community exists in db
+				const communityDoc = await Transaction.get(communityDocRef);
+				if (communityDoc.exists()) {
+					throw new Error(
+						`Sorry r/${communityName} is already taken. Try another.`
+					);
+				}
+				Transaction.set(communityDocRef, {
+					createId: user?.uid,
+					createdAt: serverTimestamp(),
+					numberOfMembers: 1,
+					privacyType: communityType,
+				});
 
-			if (communityDoc.exists()) {
-				throw new Error(
-					`Sorry r/${communityName} is already taken. Try another.`
+				//create community snippet on user
+				Transaction.set(
+					doc(firestore, `users/${user?.uid}/communitySnippets`, communityName),
+					{
+						communityId: communityName,
+						isModerator: true,
+					}
 				);
-			}
-
-			await setDoc(communityDocRef, {
-				createId: user?.uid,
-				createdAt: serverTimestamp(),
-				numberOfMembers: 1,
-				privacyType: communityType,
 			});
 		} catch (error: any) {
 			console.log("handleCreateCommunity error", error);
