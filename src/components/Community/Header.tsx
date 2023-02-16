@@ -9,6 +9,7 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ communityData }) => {
+	// importing community state and join leave functions
 	const { communityStateValue, onJoinOrLeaveCommunity, loading } =
 		useCommunityData();
 
@@ -21,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
 			<Box height="50%" bg="blue.400" />
 			<Flex justify="center" bg="white" flexGrow={1}>
 				<Flex width="95%" maxWidth="860px">
+					{/* if there is a community image it shows it, if not it defaults to the reddit icon */}
 					{communityData.imageURL ? (
 						<Image alt="community image" />
 					) : (

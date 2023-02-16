@@ -24,16 +24,20 @@ const useCommunityData = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
+	// a function to update the firebase databases when a user joins or leaves the community
+
 	const onJoinOrLeaveCommunity = (
 		communityData: Community,
 		isJoined: boolean
 	) => {
+		// if the user is not logged in and clicks join community, the AuthModal opens and prompts them to login or signup
 		if (!user) {
 			setAuthModalState({ open: true, view: "login" });
 			return;
 		}
-
 		setLoading(true);
+
+		// if the user has already joined, clicking the button will make them leave the community
 		if (isJoined) {
 			leaveCommunity(communityData.id);
 			return;
@@ -41,6 +45,7 @@ const useCommunityData = () => {
 		joinCommunity(communityData);
 	};
 
+	// a function that grabs all the community data from the firebase database about the user then puts them in an array called mySnippets
 	const getMySnippets = async () => {
 		setLoading(true);
 		try {
@@ -60,6 +65,7 @@ const useCommunityData = () => {
 		setLoading(false);
 	};
 
+	// a function to batch write joining the community * batch write will do all of the function or none of the function
 	const joinCommunity = async (communityData: Community) => {
 		try {
 			const batch = writeBatch(firestore);
@@ -69,6 +75,7 @@ const useCommunityData = () => {
 				imageURL: communityData.imageURL || "",
 			};
 
+			// telling the batch where to update the information and what to update it with
 			batch.set(
 				doc(
 					firestore,
@@ -82,6 +89,7 @@ const useCommunityData = () => {
 				numberOfMembers: increment(1),
 			});
 
+			// getting the previous state of user communities, spreading it out and adding the newly joined community to the end of the list
 			await batch.commit();
 			setCommunityStateValue((prev) => ({
 				...prev,
@@ -94,6 +102,7 @@ const useCommunityData = () => {
 		setLoading(false);
 	};
 
+	// the same as above but opposite
 	const leaveCommunity = async (communityId: string) => {
 		try {
 			const batch = writeBatch(firestore);
@@ -120,11 +129,14 @@ const useCommunityData = () => {
 		setLoading(false);
 	};
 
+	// everytime the user changes this function runs and gets the community data for that user
 	useEffect(() => {
 		if (!user) return;
 		getMySnippets();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
+
+	// 	returning these as variables means we can destructure* them as props in other functions and use them globally
 	return {
 		//data and functions
 		communityStateValue,

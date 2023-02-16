@@ -4,6 +4,7 @@ import { theme } from "../chakra/theme";
 import Layout from "../components/Layout/Layout";
 import { RecoilRoot } from "recoil";
 
+// the top level of the app *component* that we wrap in chakra/layout for styles and recoil for states
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<RecoilRoot>

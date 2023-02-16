@@ -13,10 +13,12 @@ type CommunityPageProps = {
 };
 
 const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {
+	// if theres no community it loads an error page telling the user that
 	if (!communityData) {
 		return <CommunityNotFound></CommunityNotFound>;
 	}
 
+	// if there is a community this return section gives a left hand side and ride hand side wrapped in fragments so they are the same on every page
 	return (
 		<>
 			<Header communityData={communityData} />

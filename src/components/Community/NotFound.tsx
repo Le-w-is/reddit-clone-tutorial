@@ -1,6 +1,7 @@
 import { Button, Flex, Link } from "@chakra-ui/react";
 import React from "react";
 
+// returns an on screen error message if the community does not exist
 const CommunityNotFound: React.FC = () => {
 	return (
 		<Flex
